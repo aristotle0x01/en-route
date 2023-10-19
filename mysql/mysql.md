@@ -126,19 +126,9 @@ A: 取决于read view选取数据版本的时机，每次读最新或者事务�
 
 **Q**: undo log物理上是什么结构？与行记录如何关联？所谓rollback segment是怎么回事？
 
-<img src="https://user-images.githubusercontent.com/2216435/276671231-d7023575-6b5e-4a22-ad34-98e7bcd8c7a9.png" alt="**InnoDB Architecture**" style="zoom:65%; float: left;" />
-
-------
-
-<img src="https://user-images.githubusercontent.com/2216435/276671549-0171afcd-e66d-451e-8da5-221f9623f3c3.png" alt="**InnoDB Architecture**" style="zoom:50%; float: left;" />
-
-------
-
-<img src="https://user-images.githubusercontent.com/2216435/276671902-ff1a151b-5aba-4535-a67d-9ff585908afe.png" alt="**rollback segment**" style="zoom:90%; float: left;" />
-
-------
-
-<img src="https://user-images.githubusercontent.com/2216435/276672088-9354f131-2a7b-4133-b14f-125e30b58531.png" alt="undo log chain" style="zoom:75%; float: left;" />
+| <img src="https://user-images.githubusercontent.com/2216435/276671231-d7023575-6b5e-4a22-ad34-98e7bcd8c7a9.png" alt="**InnoDB Architecture**" style="zoom:50%; float: left;" /> | <img src="https://user-images.githubusercontent.com/2216435/276671549-0171afcd-e66d-451e-8da5-221f9623f3c3.png" alt="**InnoDB Architecture**" style="zoom:40%; float: left;" /> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/2216435/276671902-ff1a151b-5aba-4535-a67d-9ff585908afe.png" alt="**rollback segment**" style="zoom:70%; float: left;" /> | <img src="https://user-images.githubusercontent.com/2216435/276672088-9354f131-2a7b-4133-b14f-125e30b58531.png" alt="undo log chain" style="zoom:35%; float: left;" /> |
 
 
 
