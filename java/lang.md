@@ -183,3 +183,27 @@ A: 初始只有**MSI**三个状态
 **Q**: 什么是premature publishing?
 
 A: [Initializing non-final field](https://stackoverflow.com/questions/31223219/initializing-non-final-field)。new 一个新对象并赋值给一个引用后，对象的非final字段有可能尚未完成赋值。
+
+
+
+------
+
+**volatile**
+
+
+
+**Q**: 字节跳动一面问题｜读取volatile变量会影响其他no-volatile变量在工作内存的值吗？
+
+A: https://leetcode.cn/circle/discuss/8X13Ub/
+
+[Guide to the Volatile Keyword in Java](https://www.baeldung.com/java-volatile)
+
+[Java Volatile Keyword](https://jenkov.com/tutorials/java-concurrency/volatile.html#full-volatile-visibility-guarantee)
+
+[Java theory and practice: Fixing the Java Memory Model, Part 2](https://archive.ph/pHqcD#selection-333.0-340.0)
+
+
+
+**Q**: singleton double checking？
+
+A: [The "Double-Checked Locking is Broken" Declaration](https://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)

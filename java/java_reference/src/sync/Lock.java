@@ -1,4 +1,4 @@
-package thread;
+package sync;
 
 import org.openjdk.jol.info.ClassLayout;
 
