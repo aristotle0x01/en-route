@@ -14,6 +14,14 @@ A:
 
 
 
+## class file format
+
+[Chapter 4. The `class` File Format](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7)
+
+![class file format](https://user-images.githubusercontent.com/2216435/285096072-36305922-a3c5-40ba-903d-dd31c7dd091c.png)
+
+
+
 ## java线程
 
 [Java Concurrency and Multithreading Tutorial](http://tutorials.jenkov.com/java-concurrency/index.html) 非常完整详细
