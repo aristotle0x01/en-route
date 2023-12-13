@@ -64,9 +64,9 @@ registry.xxx.com/bop-devops/phpadmin
 
 `show variables like '%bin%';`
 
-`show binlog events in 'mysql-bin.000014';`
+`show binlog events in 'mysql-bin.000020';`
 
-`mysqlbinlog -vv  mysql-bin.000014`
+`mysqlbinlog -vv mysql-bin.000020`
 
 ### 3.3 场景
 
@@ -74,7 +74,7 @@ registry.xxx.com/bop-devops/phpadmin
 update t1 set c2 = 12; // A
 update t1 set c2 = 13; // B
 
-1) *mysqldump  --flush-logs --delete-master-logs  --all-databases --single-transaction > full-backup.sql*
+1) *mysqldump  --flush-logs --delete-master-logs  --master-data=2 --all-databases --single-transaction > full-backup.sql*
 2) *do A & B, A position=<u>422</u>*
 3) *binlog off, drop table t1*
 4) *mysql -uroot < full-backup.sql*

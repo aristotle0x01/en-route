@@ -29,6 +29,9 @@ public class Test1 extends Base {
 
     @Override
     public boolean equals(Object obj) {
+        a2.hashCode();
+        ht.hashCode();
+
         td();
         if (obj == null) return false;
         if (getClass() != obj.getClass())

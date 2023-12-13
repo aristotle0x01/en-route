@@ -1,4 +1,4 @@
-package classloader.test.bean;
+package postman.classloader.test.bean;
 
 public class ClassIdentity {
 
@@ -8,8 +8,8 @@ public class ClassIdentity {
 
     public void testClassIdentity() {
         String classDataRootPath = "E:\\";
-        FileSystemClassLoader fscl1 = new FileSystemClassLoader(classDataRootPath);
-        FileSystemClassLoader fscl2 = new FileSystemClassLoader(classDataRootPath);
+        classloader.test.bean.FileSystemClassLoader fscl1 = new classloader.test.bean.FileSystemClassLoader(classDataRootPath);
+        classloader.test.bean.FileSystemClassLoader fscl2 = new classloader.test.bean.FileSystemClassLoader(classDataRootPath);
         String className = "xxx.Person";
         try {
             // findLoadedClass in loadClass:
