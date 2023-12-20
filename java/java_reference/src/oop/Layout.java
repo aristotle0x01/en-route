@@ -17,6 +17,7 @@ public class Layout {
 
     public static void main0(String args[]) throws Exception {
         FieldsArrangement fa = new FieldsArrangement();
+        fa.getClass().newInstance();
         System.out.println("object address: 0x" + Long.toHexString(VM.current().addressOf(fa)));
         System.out.println("object hashcode: 0x" + Long.toHexString(fa.hashCode()));
     }
