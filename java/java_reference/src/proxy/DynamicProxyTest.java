@@ -18,7 +18,7 @@ public class DynamicProxyTest {
         enhanced.update();
 
         // way 2: save jdk generated proxy class
-        // ProxyUtils.generateClassFile(us.getClass(), "DynamicProxyTest.DynProxy");
+        ProxyUtils.generateClassFile(us.getClass(), "DynamicProxyTest.DynProxy");
     }
 
     public static class LogProxy implements InvocationHandler {

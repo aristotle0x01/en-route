@@ -208,8 +208,14 @@ A: [The "Double-Checked Locking is Broken" Declaration](https://www.cs.umd.edu/~
 
 ------
 
-**AOP**
+**java dynamic proxy**
 
-Q: self-invocation issue, why aspectj don't have it
+Q: what is java proxy?
 
 A: [Proxying Mechanisms](https://docs.spring.io/spring-framework/reference/core/aop/proxying.html#aop-understanding-aop-proxies)
+
+* self invocation
+* final method issue
+* performance: cglib vs jdk
+* bean加载循环依赖问题
+* dubbo远程调用
