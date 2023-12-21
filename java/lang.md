@@ -190,8 +190,6 @@ A: [Initializing non-final field](https://stackoverflow.com/questions/31223219/i
 
 **volatile**
 
-
-
 **Q**: 字节跳动一面问题｜读取volatile变量会影响其他no-volatile变量在工作内存的值吗？
 
 A: https://leetcode.cn/circle/discuss/8X13Ub/
@@ -207,3 +205,11 @@ A: https://leetcode.cn/circle/discuss/8X13Ub/
 **Q**: singleton double checking？
 
 A: [The "Double-Checked Locking is Broken" Declaration](https://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
+
+------
+
+**AOP**
+
+Q: self-invocation issue, why aspectj don't have it
+
+A: [Proxying Mechanisms](https://docs.spring.io/spring-framework/reference/core/aop/proxying.html#aop-understanding-aop-proxies)

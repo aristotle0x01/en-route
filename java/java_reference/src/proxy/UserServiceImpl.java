@@ -2,9 +2,9 @@ package proxy;
 
 public class UserServiceImpl implements UserService {
     public void select() {
-        System.out.println("查询 selectById");
+        System.out.println("select called");
     }
     public void update() {
-        System.out.println("更新 update");
+        System.out.println("update called");
     }
 }
