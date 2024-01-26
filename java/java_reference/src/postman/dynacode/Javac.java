@@ -42,6 +42,8 @@ public final class Javac {
 		PrintWriter errPrinter = new PrintWriter(err);
 
 		String args[] = buildJavacArgs(srcFiles);
+		// add /Library/Java/JavaVirtualMachines/jdk1.8.0_171.jdk/Contents/Home/lib/tools.jar to project to fix
+		// "package com.sun.tools.javac does not exist" issue
 		int resultCode = com.sun.tools.javac.Main.compile(args, errPrinter);
 
 		errPrinter.close();
