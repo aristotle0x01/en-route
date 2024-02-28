@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.Arrays;
 
-public class Solution {
+public class Solution283 {
 
     // 0283
     // https://leetcode.com/problems/move-zeroes/
@@ -97,7 +97,7 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        Solution s = new Solution();
+        Solution283 s = new Solution283();
         // int[] array = new int[]{1,0,1};
         // int[] array = new int[]{0,0,1};
         int[] array = new int[]{0,1,0,3,12};
