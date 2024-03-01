@@ -15,30 +15,13 @@ public class Solution48 {
     // substitute the first element e to this mark, rotate e to its destination d at (fi, fj)
     // continue to rotate d, until d == mark
 
-    // since -1000 <= matrix[i][j] <= 1000
-    // used as a mark, the original element already rotated, but new element
-    // not filled yet
-    static int special = -1001;
-
-    // rotate element in (i, j) to its final position, and store final pos in indexes
-    int rotate_to(int[][] matrix, int t, Integer i, Integer j, int[] indexes) {
-        int fi, fj;
-        // m[i][j] => m[j][size-i-1]
-        fi = j;
-        fj = matrix.length - i - 1;
-
-        int temp = matrix[fi][fj];
-        if (t == special) {
-            matrix[fi][fj] = matrix[i][j];
-            matrix[i][j] = t;
-        } else {
-            matrix[fi][fj] = t;
+    public void rotate(int[][] matrix) {
+        int layers = matrix.length / 2;
+        int layer = 0;
+        while (layer < layers) {
+            rotate(matrix, layer);
+            layer++;
         }
-
-        t = temp;
-        indexes[0] = fi;
-        indexes[1] = fj;
-        return t;
     }
 
     void rotate(int[][] matrix, int layer) {
@@ -63,13 +46,29 @@ public class Solution48 {
         }
     }
 
-    public void rotate(int[][] matrix) {
-        int layers = matrix.length / 2;
-        int layer = 0;
-        while (layer < layers) {
-            rotate(matrix, layer);
-            layer++;
+    // since -1000 <= matrix[i][j] <= 1000
+    // used as a mark, the original element already rotated, but new element
+    // not filled yet
+    static int special = -1001;
+    // rotate element in (i, j) to its final position, and store final pos in indexes
+    int rotate_to(int[][] matrix, int t, Integer i, Integer j, int[] indexes) {
+        int fi, fj;
+        // m[i][j] => m[j][size-i-1]
+        fi = j;
+        fj = matrix.length - i - 1;
+
+        int temp = matrix[fi][fj];
+        if (t == special) {
+            matrix[fi][fj] = matrix[i][j];
+            matrix[i][j] = t;
+        } else {
+            matrix[fi][fj] = t;
         }
+
+        t = temp;
+        indexes[0] = fi;
+        indexes[1] = fj;
+        return t;
     }
 
     public static void main(String[] args) {
