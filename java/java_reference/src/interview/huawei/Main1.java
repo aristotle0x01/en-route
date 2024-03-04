@@ -11,11 +11,8 @@ import java.util.Scanner;
 在虚拟游戏中，最小单位为整数，不能拆分为小数；
 投资额*回报率=投资回报
 第一行：产品数(取值范围[1, 20])，总投资额(整数，取值范围[1, 10000])，可接受的总风险(整数，取值范围[1, 200])
-
 第二行：产品投资回报率序列，输入为整数，取值范围[1,60]
-
 第三行：产品风险值序列，输入为整数，取值范围[1,100]
-
 第四行：最大投资额度序列，输入为整数，取值范围[1,10000]
 在虚拟游戏中，每项投资风险值相加为总风险值；
 在虚拟游戏中，最多只能投资2个理财产品；
@@ -91,7 +88,7 @@ public class Main1 {
                 }
 
                 if (investReturnArray[j] > investReturnArray[i]) {
-                    if (maxAllowedPerProductArray[j] >= maxInvestMoney) {
+                    if (maxAllowedPerProductArray[j] > maxInvestMoney) {
                         i_max_return = 1 * investReturnArray[i] + (maxInvestMoney-1) * investReturnArray[j];
                         if (i_max_return > maxReturn) {
                             maxReturn = i_max_return;

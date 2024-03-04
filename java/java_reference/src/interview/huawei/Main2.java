@@ -14,6 +14,10 @@ import java.util.Scanner;
 1.若输入信息不合法或无效，则申请失败。
 2.若没有足够的空间供分配，则申请失败。
 3.堆内存信息有区域重叠或有非法值等都是无效输入。
+1
+0 1
+3 2
+exit
 */
 public class Main2 {
     private static int MAX = 100;
@@ -24,15 +28,29 @@ public class Main2 {
         ArrayList<int[]> used = new ArrayList<>();
         while (in.hasNextInt()) { // 注意 while 处理多个 case
             need = in.nextInt();
-
-            while (in.hasNextInt()) {
+            break;
+        }
+//        while (in.hasNextLine()) {
+//            if (in.hasNextInt()){
+//
+//            }else {
+//                break;
+//            }
+//        }
+        while (in.hasNext()) {
+            if (in.hasNextInt()) {
                 int[] temp = new int[2];
                 temp[0] = in.nextInt();
                 temp[1] = in.nextInt();
                 used.add(temp);
+            } else {
+                String input = in.next();
+                if (input.equals("exit")) {
+                    break;
+                }
             }
-            break;
         }
+
         if (used.isEmpty()) {
             if (need <= MAX) {
                 System.out.println(0);
@@ -63,12 +81,14 @@ public class Main2 {
                 empty.add(temp);
             }
 
-            e1 = used.get(i+1)[0] + used.get(i+1)[1];
-            if (e1 < MAX) {
-                int[] temp = new int[2];
-                temp[0] = e1;
-                temp[1] = MAX - e1;
-                empty.add(temp);
+            if (i == (used.size()-2)) {
+                e1 = used.get(i+1)[0] + used.get(i+1)[1];
+                if (e1 < MAX) {
+                    int[] temp = new int[2];
+                    temp[0] = e1;
+                    temp[1] = MAX - e1;
+                    empty.add(temp);
+                }
             }
         }
 
