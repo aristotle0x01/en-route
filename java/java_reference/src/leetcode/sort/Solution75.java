@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.sort;
 
 public class Solution75 {
 

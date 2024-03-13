@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.sort;
 
 public class Solution27 {
     // [3,2,2,3] 3
