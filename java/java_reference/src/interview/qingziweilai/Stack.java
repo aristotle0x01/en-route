@@ -56,19 +56,3 @@ class Stack {
         return true;
     }
 }
-
-// 4.
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
