@@ -1,5 +1,5 @@
 package postman.classloader.hotswap;
 
-public class B {
+public class ZBClass {
 
 }
