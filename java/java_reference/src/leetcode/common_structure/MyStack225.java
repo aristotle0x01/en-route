@@ -3,14 +3,14 @@ package leetcode.common_structure;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MyStack {
+public class MyStack225 {
     // 225
     // https://leetcode.com/problems/implement-stack-using-queues/description/
 
     private Queue<Integer> q1;
     private Queue<Integer> q2;
 
-    public MyStack() {
+    public MyStack225() {
         q1 = new LinkedList<>();
         q2 = new LinkedList<>();
     }
