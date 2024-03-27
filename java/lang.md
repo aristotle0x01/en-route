@@ -28,19 +28,13 @@ map1.put(null, "cc");
 map1.put(i0, "dd");
 ```
 
-
-
 **Q**: ConcurrentHashMap怎么支持无锁读并发？
 
 A: 
 
-
-
 **Q**: `synchronized (f) {  if (tabAt(tab, i) == f)...` 在变更操作中的作用？
 
 A: 
-
-
 
 **Q**: ConcurrentHashMap get(key)同时发生resize()，如何保证get？
 
@@ -62,10 +56,6 @@ A: 避免操作系统调用及休眠，乃至于cas
 
 [The Hotspot Java Virtual Machine](https://www.cs.princeton.edu/picasso/mats/HotspotOverview.pdf)
 
-
-
-
-
 ------
 
 **locking**
@@ -73,7 +63,7 @@ A: 避免操作系统调用及休眠，乃至于cas
 **Q**: ostep 中的经典生产消费者问题，下述实现存在的两个重要bug？
 
 | <img src="https://user-images.githubusercontent.com/2216435/277291077-fabceceb-5f88-4bce-8b5b-955b08c487c2.png" alt="put/get" style="zoom:30%; float: left;" /> | <img src="https://user-images.githubusercontent.com/2216435/277291821-f711c075-6d81-40a1-975f-76c52fd93f52.png" alt="put/get" style="zoom:50%; float: left;" /> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 A: 
 
@@ -91,8 +81,6 @@ A:
 
 2）java中`Condition.await`类同，详见`ProducerConsumerDemo`
 
-
-
 **Q**: 锁的几种实现？
 
 A: 参考[ostep: Locks](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf)
@@ -109,8 +97,8 @@ A: 参考[ostep: Locks](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf
 
 6)休眠+队列+spin
 
-| solaris lock                                                 | linux lock                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| solaris lock                                                                                                                                                 | linux lock                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://user-images.githubusercontent.com/2216435/277613454-636a405a-63eb-4634-aec1-01a9937db866.png" alt="park" style="zoom:50%; float: left;" /> | <img src="https://user-images.githubusercontent.com/2216435/277614140-8a2890b8-2135-4a01-a1b6-62441ded5e68.png" alt="futex" style="zoom:50%; float: left;" /> |
 
 实现：`6.828 hw/sync.c, java_reference/ProducerConsumerDemo.java`
@@ -121,8 +109,6 @@ A: 参考[ostep: Locks](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf
 
 - coherence: 强调多核cache之间的协调动作
 - consistency：整体对外承诺的标准
-
-
 
 **Q**: 什么是sequential consistency?
 
@@ -136,8 +122,6 @@ A: 如果某个核执行了`a=1;b=1`，那么其它核对于a,b的可见性能�
 
 <img src="https://user-images.githubusercontent.com/2216435/278514361-4540a1e8-0546-411b-9fe7-c78c52db1adf.png" alt="sequential consistency" style="zoom:35%; float: left;" />
 
-
-
 **Q**: **MESI**协议为什么要多出来Exclusive这个状态?
 
 A: 初始只有**MSI**三个状态
@@ -149,8 +133,6 @@ A: 初始只有**MSI**三个状态
 <img src="https://user-images.githubusercontent.com/2216435/281074573-fa3a2dac-b656-4cab-9cf5-2fd042e21fb0.png" alt="The MESI protocol" style="zoom:40%; float: left;" />
 
 实际上在此基础上还有**false sharing, directory cache protocol**概念
-
-
 
 **ref:**
 
@@ -166,10 +148,6 @@ A: 初始只有**MSI**三个状态
 
 [Memory Consistency Models: A Tutorial](https://www.cs.utexas.edu/~bornholt/post/memory-models.html)
 
-
-
-
-
 **java memory model**
 
 [Doug Lea: The JSR-133 Cookbook for Compiler Writers](https://gee.cs.oswego.edu/dl/jmm/cookbook.html)
@@ -178,13 +156,9 @@ A: 初始只有**MSI**三个状态
 
 ------
 
-
-
 **Q**: 什么是premature publishing?
 
 A: [Initializing non-final field](https://stackoverflow.com/questions/31223219/initializing-non-final-field)。new 一个新对象并赋值给一个引用后，对象的非final字段有可能尚未完成赋值。
-
-
 
 ------
 
@@ -199,8 +173,6 @@ A: https://leetcode.cn/circle/discuss/8X13Ub/
 [Java Volatile Keyword](https://jenkov.com/tutorials/java-concurrency/volatile.html#full-volatile-visibility-guarantee)
 
 [Java theory and practice: Fixing the Java Memory Model, Part 2](https://archive.ph/pHqcD#selection-333.0-340.0)
-
-
 
 **Q**: singleton double checking？
 
