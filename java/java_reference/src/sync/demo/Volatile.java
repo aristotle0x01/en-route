@@ -1,4 +1,4 @@
-package sync;
+package sync.demo;
 
 // 题目求助｜字节跳动一面问题｜读取volatile变量会影响其他no-volatile变量在工作内存的值吗？
 // https://leetcode.cn/circle/discuss/8X13Ub/?um_chnnl=huawei?um_from_appkey=5fcda41c42348b56d6f8e8d5

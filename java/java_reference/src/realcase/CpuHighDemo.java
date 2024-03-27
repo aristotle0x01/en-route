@@ -1,4 +1,4 @@
-package demo;// this is to demo a java instance cpu high
+package realcase;// this is to demo a java instance cpu high
 
 // https://dafengge0913.github.io/java-high-cpu-troubleshooting/
 

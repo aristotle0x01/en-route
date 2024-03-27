@@ -1,4 +1,4 @@
-package sync;
+package sync.demo;
 
 import org.openjdk.jol.info.ClassLayout;
 
