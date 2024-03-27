@@ -68,17 +68,6 @@ public class Solution912 {
             return;
         }
 
-        boolean b = true;
-        for(int i=start; i<end; i++){
-            if(nums[i] != nums[i+1]) {
-                b = false;
-                break;
-            }
-        }
-        if (b){
-            return;
-        }
-
         // take care to take pivot off from each sub-array
         int pivot_index = partition(nums, start, end);
         sort(nums, start, pivot_index-1);
