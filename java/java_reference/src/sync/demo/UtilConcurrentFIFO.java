@@ -1,11 +1,13 @@
 package sync.demo;
 
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class UtilConcurrentFIFO {
 	final Lock lock = new ReentrantLock();
 	final Condition notFull  = lock.newCondition(); 
-	final Condition notEmpty = lock.newCondition(); 
+	final Condition notEmpty = lock.newCondition();
 
 	final Object[] items = new Object[100];
 	int putptr, takeptr, count;
