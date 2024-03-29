@@ -1,4 +1,4 @@
-package bytecode;
+package hotspot.bytecode;
 
 public class UnrelatedClass {
     public static void main(String args[]) {

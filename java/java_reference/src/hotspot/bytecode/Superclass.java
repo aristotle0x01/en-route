@@ -1,4 +1,4 @@
-package bytecode;
+package hotspot.bytecode;
 
 class Baseclass {
     protected void f1() {

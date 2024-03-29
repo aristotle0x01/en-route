@@ -1,4 +1,4 @@
-package oop;
+package hotspot.oop;
 
 import java.lang.reflect.Field;
 import sun.misc.Unsafe;

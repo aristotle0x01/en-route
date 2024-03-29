@@ -1,4 +1,4 @@
-package bytecode;
+package hotspot.bytecode;
 
 import java.util.Random;
 

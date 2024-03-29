@@ -1,4 +1,4 @@
-package oop;
+package hotspot.oop;
 
 import org.openjdk.jol.vm.VM;
 
