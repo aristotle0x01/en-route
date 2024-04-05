@@ -7,3 +7,4 @@ follow [Leetcode面试高频题分类刷题总结](https://zhuanlan.zhihu.com/p/
 * 快速排序
 * palindrome 5，647
 * 3sum: 15, 受2sum思维定式影响
+* 543 101
