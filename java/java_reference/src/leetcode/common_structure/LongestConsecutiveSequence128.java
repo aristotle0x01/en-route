@@ -27,8 +27,13 @@ public class LongestConsecutiveSequence128 {
 
             set.add(nums[i]);
         }
-        while (!set.isEmpty()) {
-            int key = set.stream().findFirst().get();
+
+        for (int i=0; i<n; i++) {
+            int key = nums[i];
+            if (!set.contains(key)){
+                continue;
+            }
+
             int startv = Math.max(key - n + 1, minV);
             int endv = Math.min(key + n - 1, maxV);
 
