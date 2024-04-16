@@ -17,8 +17,8 @@ public class Interrupt {
              System.out.println("normal thread end");
         }, "normal_thread");
 
-        normal.start();
+        abnormal.start();
         TimeUnit.MILLISECONDS.sleep(100);
-        normal.interrupt();
+        abnormal.interrupt();
     }
 }
