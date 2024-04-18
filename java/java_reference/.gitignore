@@ -15,4 +15,5 @@ mvnw.cmd
 */target/
 out/*
 
-java/java_reference/src/leetcode/~$leetcode_summary.xlsx
+## https://stackoverflow.com/questions/61811801/how-to-make-git-ignore-temporary-files-created-by-ms-office-starting-with
+~$*
