@@ -1,5 +1,6 @@
 package leetcode.common_structure;
 
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class KClosestPointsToOrigin973 {
@@ -33,6 +34,19 @@ public class KClosestPointsToOrigin973 {
         @Override
         public int compareTo(Object o) {
             return this.distance - ((Pair)o).distance;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return distance == pair.distance && index == pair.index;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(distance, index);
         }
     }
 }
