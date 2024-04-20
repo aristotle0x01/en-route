@@ -12,3 +12,16 @@
 * [RedBlackBST.java](https://algs4.cs.princeton.edu/33balanced/RedBlackBST.java.html)
 * [RED-BLACK TREE (FULLY EXPLAINED, WITH JAVA CODE)](https://www.happycoders.eu/algorithms/red-black-tree-java/)
 * [Julienne Walker](https://archive.ph/2013.12.08-140448/http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_rbtree.aspx)
+
+
+
+## insert part
+
+refer to Goodrich p530, the most clearly presented
+
+
+
+## delete part
+
+refer to Dr. Naveen Garg [Lecture - 14 Red Black Trees](https://www.youtube.com/watch?v=JRsN4Oz36QU&list=PLBF3763AF2E1C572F&index=15), the most clearly presented; for doc version refer to `L17-Red-Black-Trees-clean.pptx` also by Dr. Naveen Garg
+
