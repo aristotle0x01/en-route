@@ -26,10 +26,14 @@ public class BTreePrinter {
 
         BTreePrinter.printWhitespaces(firstSpaces);
 
-        List<Node<T>> newNodes = new ArrayList<Node<T>>();
+        List<Node<T>> newNodes = new ArrayList<>();
         for (Node<T> node : nodes) {
             if (node != null) {
-                System.out.print(node.key);
+                if (node instanceof Node.ColorTreeNode && ((Node.ColorTreeNode<T>) node).getColor() == Node.ColorTreeNode.RED) {
+                    System.out.print("("+node.key+")");
+                } else {
+                    System.out.print(node.key);
+                }
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {

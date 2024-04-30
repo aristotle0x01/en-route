@@ -1,28 +1,28 @@
 package rbtree;
 
 public class BinarySearchTree<T extends Comparable<T>> {
-    private TreeNode<T> root;
+    private Node.TreeNode<T> root;
 
     public BinarySearchTree() {
         this.root = null;
     }
 
-    public BinarySearchTree(TreeNode<T> node) {
+    public BinarySearchTree(Node.TreeNode<T> node) {
         this.root = node;
     }
 
     public BinarySearchTree(T v) {
-        this.root = new TreeNode<>(v, null, null);
+        this.root = new Node.TreeNode<>(v, null, null);
     }
 
     // false only if the key already exists
     public void insert(T key) {
         if (root == null) {
-            root = new TreeNode<>(key, null, null);
+            root = new Node.TreeNode<>(key, null, null);
             return;
         }
 
-        TreeNode<T> parent = root;
+        Node.TreeNode<T> parent = root;
         while (true) {
             int cmp = parent.key.compareTo(key);
             if (cmp == 0) {
@@ -30,34 +30,34 @@ public class BinarySearchTree<T extends Comparable<T>> {
             } else if (cmp > 0) {
                 // to left
                 if (parent.left == null) {
-                    parent.left = new TreeNode<>(key, null, null);
+                    parent.left = new Node.TreeNode<>(key, null, null);
                     return;
                 } else {
-                    parent = (TreeNode<T>) parent.left;
+                    parent = (Node.TreeNode<T>) parent.left;
                 }
             } else {
                 // to right
                 if (parent.right == null) {
-                    parent.right = new TreeNode<>(key, null, null);
+                    parent.right = new Node.TreeNode<>(key, null, null);
                     return;
                 } else {
-                    parent = (TreeNode<T>) parent.right;
+                    parent = (Node.TreeNode<T>) parent.right;
                 }
             }
         }
     }
 
     // return null if key not exists
-    public TreeNode<T> find(T key) {
-        TreeNode<T> p = root;
+    public Node.TreeNode<T> find(T key) {
+        Node.TreeNode<T> p = root;
         while (p != null) {
             int cmp = p.key.compareTo(key);
             if (cmp == 0) {
                 return p;
             } else if (cmp > 0) {
-                p = (TreeNode<T>) p.left;
+                p = (Node.TreeNode<T>) p.left;
             } else {
-                p = (TreeNode<T>) p.right;
+                p = (Node.TreeNode<T>) p.right;
             }
         }
 
@@ -66,7 +66,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     // false only key not exists
     public void delete(T key) {
-        TreeNode<T> parent, node;
+        Node.TreeNode<T> parent, node;
         parent = null;
         node = root;
         while (node != null) {
@@ -76,9 +76,9 @@ public class BinarySearchTree<T extends Comparable<T>> {
             }
             parent = node;
             if (cmp > 0) {
-                node = (TreeNode<T>) node.left;
+                node = (Node.TreeNode<T>) node.left;
             } else {
-                node = (TreeNode<T>) node.right;
+                node = (Node.TreeNode<T>) node.right;
             }
         }
 
@@ -105,13 +105,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
 
         // non leaf node
-        TreeNode<T> swapNode = null, parentOfSwapNode = node;
+        Node.TreeNode<T> swapNode = null, parentOfSwapNode = node;
         if (node.left != null) {
             // rightmost node of left subtree
-            swapNode = (TreeNode<T>) node.left;
+            swapNode = (Node.TreeNode<T>) node.left;
             while (swapNode.right != null) {
                 parentOfSwapNode = swapNode;
-                swapNode = (TreeNode<T>) swapNode.right;
+                swapNode = (Node.TreeNode<T>) swapNode.right;
             }
             if (parentOfSwapNode != node) {
                 parentOfSwapNode.right = swapNode.left;
@@ -120,10 +120,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
             }
         } else {
             // leftmost node of right subtree
-            swapNode = (TreeNode<T>) node.right;
+            swapNode = (Node.TreeNode<T>) node.right;
             while (swapNode.left != null) {
                 parentOfSwapNode = swapNode;
-                swapNode = (TreeNode<T>) swapNode.left;
+                swapNode = (Node.TreeNode<T>) swapNode.left;
             }
             if (parentOfSwapNode != node) {
                 parentOfSwapNode.left = swapNode.right;
@@ -135,7 +135,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     }
 
-    public void printTree(TreeNode<T> tree) {
+    public void printTree(Node.TreeNode<T> tree) {
         System.out.println("----Print tree----");
         System.out.println("------------------");
         BTreePrinter.printNode(tree);
@@ -155,7 +155,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         bst.insert(14);
         bst.printTree(bst.root);
 
-        TreeNode<Integer> node = bst.find(8);
+        Node.TreeNode<Integer> node = bst.find(8);
 
         bst.delete(15);
         bst.printTree(bst.root);
