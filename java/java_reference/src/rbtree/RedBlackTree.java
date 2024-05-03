@@ -79,7 +79,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         gr_grandParent = getParent(grandParent);
 
         // sibling of parent
-        Node.ColorTreeNode<T> s = getSibling(grandParent, parent);
+        Node.ColorTreeNode<T> s = getSiblingOfParent(grandParent, parent);
 
         // Case 1: The Sibling s of y is Black
         // refer to Goodrich p531 Figure 11.32
@@ -194,7 +194,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 node = (Node.ColorTreeNode<T>) node.right;
             }
         }
-
         // not exists
         if (node == null) {
             return;
@@ -203,10 +202,11 @@ public class RedBlackTree<T extends Comparable<T>> {
         // leaf node
         if (node.left == null && node.right == null) {
             // single node in tree, node == root
-            if (parent == null) {
+            if (node == root) {
                 root = null;
                 return;
-            } else {
+            }
+            if (node.getColor() == RED) {
                 int cmp = node.key.compareTo(parent.key);
                 if (cmp < 0) {
                     parent.left = null;
@@ -214,10 +214,14 @@ public class RedBlackTree<T extends Comparable<T>> {
                     parent.right = null;
                 }
                 return;
+            } else {
+                // case 3: leaf black node
+                rebalanceDelete(parent, node);
             }
+            return;
         }
 
-        // non leaf node
+        // non leaf node, swap with left/right most node, then delete the swap node
         Node.ColorTreeNode<T> swapNode = null, parentOfSwapNode = node;
         if (node.left != null) {
             // rightmost node of left subtree
@@ -226,10 +230,25 @@ public class RedBlackTree<T extends Comparable<T>> {
                 parentOfSwapNode = swapNode;
                 swapNode = (Node.ColorTreeNode<T>) swapNode.right;
             }
-            if (parentOfSwapNode != node) {
-                parentOfSwapNode.right = swapNode.left;
+
+            // swap
+            node.key = swapNode.key;
+
+            // L17-Red-Black-Trees-clean.pptx p25 case1,2
+            // red node or black node with single red left child
+            if (swapNode.getColor() == RED || swapNode.left != null) {
+                if (parentOfSwapNode == node) {
+                    parentOfSwapNode.left = swapNode.left;
+                } else {
+                    parentOfSwapNode.right = swapNode.left;
+                }
+                if (swapNode.left != null) {
+                    // case2: from red to black
+                    ((Node.ColorTreeNode<T>) swapNode.left).setColor(swapNode.getColor());
+                }
             } else {
-                node.left = null;
+                // leaf black node
+                rebalanceDelete(parentOfSwapNode, swapNode);
             }
         } else {
             // leftmost node of right subtree
@@ -238,20 +257,377 @@ public class RedBlackTree<T extends Comparable<T>> {
                 parentOfSwapNode = swapNode;
                 swapNode = (Node.ColorTreeNode<T>) swapNode.left;
             }
-            if (parentOfSwapNode != node) {
-                parentOfSwapNode.left = swapNode.right;
+
+            // swap
+            node.key = swapNode.key;
+
+            // L17-Red-Black-Trees-clean.pptx p25 first 2 cases
+            // red node or black node with single red right child
+            if (swapNode.getColor() == RED || swapNode.right != null) {
+                if (parentOfSwapNode == node) {
+                    parentOfSwapNode.right = swapNode.right;
+                } else {
+                    parentOfSwapNode.left = swapNode.right;
+                }
+                if (swapNode.right != null) {
+                    // case2: from red to black
+                    ((Node.ColorTreeNode<T>) swapNode.right).setColor(swapNode.getColor());
+                }
             } else {
-                node.right = null;
+                // case 3: leaf black node
+                rebalanceDelete(parentOfSwapNode, swapNode);
             }
         }
-        node.key = swapNode.key;
-
-        rebalanceDelete(null, null);
     }
 
-    private void rebalanceDelete(Node.ColorTreeNode<T> parent, Node.ColorTreeNode<T> child) {
-        // Case 1: The Sibling s of y is Black
-        // Case 2: The Sibling s of y is Red
+    private void rebalanceDelete(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        // refer to: L17-Red-Black-Trees-clean.pptx p27
+
+        Node.ColorTreeNode<T> b = getSibling(a, node);
+        Node.ColorTreeNode<T> c1, c2, c;
+
+        // case 1 => parent: red
+        if (a.getColor() == RED && b != null) {
+            c1 = (Node.ColorTreeNode<T>) b.left;
+            c2 = (Node.ColorTreeNode<T>) b.right;
+
+            // case1.1 some children of sibling (b) of node is red
+            if ((c1 != null && c1.getColor() == RED) || (c2 != null && c2.getColor() == RED)) {
+                case1_1(a, node);
+            } else {
+                // case1.2 both children of sibling (b) of node are black
+                case1_2(a, node);
+            }
+            return;
+        }
+
+        // case 2 => parent: black
+        if (a.getColor() == BLACK && b != null) {
+            // case2.1 sibling b is red
+            if (b.getColor() == RED) {
+                if (a.right == node) {
+                    // b.right won't be null in this case, otherwise it would violate black height
+                    c = (Node.ColorTreeNode<T>) b.right;
+                    Node.ColorTreeNode<T> d1 = (Node.ColorTreeNode<T>) c.left;
+                    Node.ColorTreeNode<T> d2 = (Node.ColorTreeNode<T>) c.right;
+
+                    // case2.1.1 some grandchild of b is red
+                    if ((d1 != null && d1.getColor() == RED) || (d2 != null && d2.getColor() == RED)) {
+                        case_2_1_1(a, node);
+                    } else {
+                        // case2.1.2 both grandchildren of b are black
+                        case_2_1_2(a, node);
+                    }
+                } else {
+                    // b.left won't be null in this case, otherwise it would violate black height
+                    c = (Node.ColorTreeNode<T>) b.left;
+                    Node.ColorTreeNode<T> d1 = (Node.ColorTreeNode<T>) c.left;
+                    Node.ColorTreeNode<T> d2 = (Node.ColorTreeNode<T>) c.right;
+
+                    // case2.1.1 some grandchild of b is red
+                    if ((d1 != null && d1.getColor() == RED) || (d2 != null && d2.getColor() == RED)) {
+                        case_2_1_1(a, node);
+                    } else {
+                        // case2.1.2 both grandchildren of b are black
+                        case_2_1_2(a, node);
+                    }
+                }
+                return;
+            }
+
+            // case2.2 sibling b is black
+            if (b.getColor() == BLACK) {
+                c1 = (Node.ColorTreeNode<T>) b.left;
+                c2 = (Node.ColorTreeNode<T>) b.right;
+
+                // case2.2.1 some child of b is red
+                if ((c1 != null && c1.getColor() == RED) || (c2 != null && c2.getColor() == RED)) {
+                    case_2_2_1(a, node);
+                } else {
+                    // case2.2.2 both children of b are black
+                    case_2_2_2(a, node);
+                }
+            }
+        }
+    }
+    private void case1_1(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        Node.ColorTreeNode<T> b = getSibling(a, node);
+        Node.ColorTreeNode<T> g = getParent(a);
+        Node.ColorTreeNode<T> c1, c2, c;
+        c1 = (Node.ColorTreeNode<T>) b.left;
+        c2 = (Node.ColorTreeNode<T>) b.right;
+        // on ppt is only a single case, have to cope with mirror case in else
+        if (a.right == node) {
+            if (c2 != null) {
+                b.right = c2.left;
+                a.left = c2.right;
+                a.right = node.left != null ? node.left : node.right;
+                a.flipColor();
+                if (g.left == a) {
+                    g.left = c2;
+                } else {
+                    g.right = c2;
+                }
+                c2.left = b;
+                c2.right = a;
+            } else {
+                a.left = b.right;
+                a.right = node.left != null ? node.left : node.right;
+                a.flipColor();
+                c1.flipColor();
+                b.flipColor();
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+                b.right = a;
+            }
+        } else {
+            if (c2 != null) {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = b.left;
+                a.flipColor();
+                b.left = a;
+                b.flipColor();
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+                c2.flipColor();
+            } else {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = c1.left;
+                a.flipColor();
+                b.left = c1.right;
+                if (g.left == a) {
+                    g.left = c1;
+                } else {
+                    g.right = c1;
+                }
+                c1.left = a;
+                c1.right = b;
+            }
+        }
+    }
+    // case1.2 both children of sibling (b) of node are black
+    private void case1_2(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        Node.ColorTreeNode<T> b = getSibling(a, node);
+        a.flipColor();
+        b.flipColor();
+        if (a.right == node) {
+            a.right = node.left != null ? node.left : node.right;
+        } else {
+            a.left = node.left != null ? node.left : node.right;
+        }
+    }
+    // case2.1.1 some grandchild of b is red
+    private void case_2_1_1(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        Node.ColorTreeNode<T> b = getSibling(a, node);
+        Node.ColorTreeNode<T> g = getParent(a);
+        Node.ColorTreeNode<T> c;
+        c = (Node.ColorTreeNode<T>) b.right;
+        Node.ColorTreeNode<T> d1 = (Node.ColorTreeNode<T>) c.left;
+        Node.ColorTreeNode<T> d2 = (Node.ColorTreeNode<T>) c.right;
+        if (a.right == node) {
+            if (d1 != null) {
+                b.right = d1;
+                d1.flipColor();
+                a.right = node.left != null ? node.left : node.right;
+                a.left = c.right;
+                c.left = b;
+                c.right = a;
+                // a is root
+                if (g == null) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                       g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
+            } else {
+                c.right = d2.left;
+                a.right = node.left != null ? node.left : node.right;
+                a.left = d2.right;
+                d2.left = b;
+                d2.right = a;
+                d2.flipColor();
+                if (g == null) {
+                    root = d2;
+                } else {
+                    if (g.left == a) {
+                        g.left = d2;
+                    } else {
+                        g.right = d2;
+                    }
+                }
+            }
+        } else {
+            // mirror case
+            if (d2 != null) {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = c.left;
+                b.left = d2;
+                d2.flipColor();
+                c.left = a;
+                c.right = b;
+                // a is root
+                if (g == null) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
+            } else {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = d1.left;
+                c.left = d1.right;
+                d1.flipColor();
+                d1.left = a;
+                d1.right = b;
+                if (g == null) {
+                    root = d1;
+                } else {
+                    if (g.left == a) {
+                        g.left = d1;
+                    } else {
+                        g.right = d1;
+                    }
+                }
+            }
+        }
+    }
+    // case2.1.2 both grandchildren of b are black
+    private void case_2_1_2(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        Node.ColorTreeNode<T> b = getSibling(a, node);
+        Node.ColorTreeNode<T> g = getParent(a);
+        Node.ColorTreeNode<T> c;
+        if (a.right == node) {
+            c = (Node.ColorTreeNode<T>) b.right;
+            a.right = node.left != null ? node.left : node.right;
+            a.left = c;
+            c.flipColor();
+            b.right = a;
+            b.flipColor();
+            if (a == root) {
+                root = b;
+            } else {
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+            }
+        } else {
+            // mirror case
+            c = (Node.ColorTreeNode<T>) b.left;
+            a.left = node.left != null ? node.left : node.right;
+            a.right = c;
+            c.flipColor();
+            b.left = a;
+            b.flipColor();
+            if (a == root) {
+                root = b;
+            } else {
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+            }
+        }
+    }
+    // case2.2.1 some child of b is red
+    private void case_2_2_1(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        Node.ColorTreeNode<T> g = getParent(a);
+        Node.ColorTreeNode<T> c = getSibling(a, node);
+        Node.ColorTreeNode<T> d1 = (Node.ColorTreeNode<T>) c.left;
+        Node.ColorTreeNode<T> d2 = (Node.ColorTreeNode<T>) c.right;
+        if (a.right == node) {
+            if (d2 != null) {
+                c.right = d2.left;
+                a.right = node.left != null ? node.left : node.right;
+                a.left = d2.right;
+                d2.left = c;
+                d2.right = a;
+                d2.flipColor();
+                if (root == a) {
+                    root = d2;
+                } else {
+                    if (g.left == a) {
+                        g.left = d2;
+                    } else {
+                        g.right = d2;
+                    }
+                }
+            } else {
+                a.right = node.left != null ? node.left : node.right;
+                a.left = c.right;
+                c.right = a;
+                d1.flipColor();
+                if (root == a) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
+            }
+        } else {
+            // mirror case
+            if (d1 != null) {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = d1.left;
+                c.left = d1.right;
+                d1.left = a;
+                d1.right = c;
+                d1.flipColor();
+                if (root == a) {
+                    root = d1;
+                } else {
+                    if (g.left == a) {
+                        g.left = d1;
+                    } else {
+                        g.right = d1;
+                    }
+                }
+            } else {
+                a.left = node.left != null ? node.left : node.right;
+                a.right = c.left;
+                c.left = a;
+                d2.flipColor();
+                if (root == a) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
+            }
+        }
+    }
+    // case2.2.2 both children of b are black
+    private void case_2_2_2(Node.ColorTreeNode<T> a, Node.ColorTreeNode<T> node) {
+        // todo: recursion up since black height is reduced by one
+        if (a.right == node) {
+            a.right = node.left != null ? node.left : node.right;
+            Node.ColorTreeNode<T> left = (Node.ColorTreeNode<T>) a.left;
+            left.flipColor();
+        } else {
+            a.left = node.left != null ? node.left : node.right;
+            Node.ColorTreeNode<T> right = (Node.ColorTreeNode<T>) a.right;
+            right.flipColor();
+        }
     }
 
     private Node.ColorTreeNode<T> getParent(Node.ColorTreeNode<T> child) {
@@ -275,11 +651,19 @@ public class RedBlackTree<T extends Comparable<T>> {
         return null;
     }
 
-    private Node.ColorTreeNode<T> getSibling(Node.ColorTreeNode<T> grandParent, Node.ColorTreeNode<T> parent) {
+    private Node.ColorTreeNode<T> getSiblingOfParent(Node.ColorTreeNode<T> grandParent, Node.ColorTreeNode<T> parent) {
         if (grandParent.left == parent) {
             return (Node.ColorTreeNode<T>) grandParent.right;
         } else {
             return (Node.ColorTreeNode<T>) grandParent.left;
+        }
+    }
+
+    private Node.ColorTreeNode<T> getSibling(Node.ColorTreeNode<T> parent, Node.ColorTreeNode<T> node) {
+        if (parent.left == node) {
+            return (Node.ColorTreeNode<T>) parent.right;
+        } else {
+            return (Node.ColorTreeNode<T>) parent.left;
         }
     }
 
@@ -290,8 +674,8 @@ public class RedBlackTree<T extends Comparable<T>> {
         System.out.println();
     }
 
+    // Goodrich p533 6th
     private static void insertExample() {
-        // Goodrich p533 6th
         // Figure 11.34
         RedBlackTree<Integer> bst = new RedBlackTree<>();
         bst.insert(4);
@@ -317,18 +701,90 @@ public class RedBlackTree<T extends Comparable<T>> {
         bst.insert(17);
         bst.printTree(bst.root);
     }
+    // Goodrich p539 6th
+    private static void deleteExample() {
+        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        bst.insert(14);
+        bst.insert(7);
+        bst.insert(16);
+        bst.insert(4);
+        bst.insert(12);
+        bst.insert(15);
+        bst.insert(18);
+        bst.insert(3);
+        bst.insert(5);
+        bst.insert(17);
+        bst.printTree(bst.root);
+
+        bst.delete(3);
+        bst.printTree(bst.root);
+
+        bst.delete(12);
+        bst.printTree(bst.root);
+
+        bst.delete(17);
+        bst.printTree(bst.root);
+
+        bst.delete(18);
+        bst.printTree(bst.root);
+
+        bst.delete(15);
+        bst.printTree(bst.root);
+
+        bst.delete(16);
+        bst.printTree(bst.root);
+    }
+
+    // from L17-Red-Black-Trees-clean.pptx examples
+    private static void rbtree_ops() {
+        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        bst.insert(47);
+        bst.printTree(bst.root);
+        bst.insert(32);
+        bst.printTree(bst.root);
+        bst.insert(71);
+        bst.printTree(bst.root);
+        bst.insert(93);
+        bst.printTree(bst.root);
+        bst.insert(65);
+        bst.printTree(bst.root);
+        bst.insert(82);
+        bst.printTree(bst.root);
+        bst.insert(87);
+        bst.printTree(bst.root);
+
+        bst.delete(32);
+        bst.printTree(bst.root);
+    }
+    private static void rbtree_ops2() {
+        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        bst.insert(47);
+        bst.insert(32);
+        bst.insert(71);
+        bst.insert(65);
+        bst.insert(87);
+        bst.insert(25);
+        bst.insert(40);
+        bst.insert(50);
+        bst.insert(82);
+        bst.insert(93);
+        bst.printTree(bst.root);
+
+        // create test case for case 2.2.2
+        Node.ColorTreeNode<Integer> t = bst.find(25);
+        t.setColor(BLACK);
+        t = bst.find(40);
+        t.setColor(BLACK);
+        t = bst.find(71);
+        t.setColor(BLACK);
+        bst.printTree(bst.root);
+
+        // case 2.2.2
+        bst.delete(25);
+        bst.printTree(bst.root);
+    }
+
     public static void main(String[] args) {
-        insertExample();
-
-        // Node.ColorTreeNode<Integer> node = bst.find(8);
-
-//        bst.delete(15);
-//        bst.printTree(bst.root);
-//        bst.delete(10);
-//        bst.printTree(bst.root);
-//        bst.delete(13);
-//        bst.printTree(bst.root);
-//        bst.delete(18);
-//        bst.printTree(bst.root);
+        rbtree_ops2();
     }
 }
