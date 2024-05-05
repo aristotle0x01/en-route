@@ -89,12 +89,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         // leaf node or one child only node
         if (node.left == null || node.right == null) {
-            // todo: can we simplify this case?
             // single node in tree
-            if (node == root && node.left == null && node.right == null) {
-                root = null;
-                return;
-            }
             delNodeColor = node.getColor();
             movedUpNode = deleteNodeWithZeroOrOneChild(node);
        } else {
@@ -124,7 +119,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 // deleted black leaf node, fix needed
                 // movedUpNode instanceof Node.ExternalNode.class
                 fixDelete(movedUpNode);
-                // todo: delete temporary movedUpNode
                 // movedUpNode.getClass() == Node.ExternalNode.class
                 resetChild(movedUpNode.parent, movedUpNode, null);
             }
@@ -218,7 +212,6 @@ public class RedBlackTree<T extends Comparable<T>> {
             if (c2 != null) {
                 b.right = c2.left;
                 a.left = c2.right;
-                // a.right = node.left != null ? node.left : node.right;
                 a.flipColor();
                 if (g.left == a) {
                     g.left = c2;
@@ -229,7 +222,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 c2.right = a;
             } else {
                 a.left = b.right;
-                // a.right = node.left != null ? node.left : node.right;
                 a.flipColor();
                 c1.flipColor();
                 b.flipColor();
@@ -242,7 +234,6 @@ public class RedBlackTree<T extends Comparable<T>> {
             }
         } else {
             if (c2 != null) {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = b.left;
                 a.flipColor();
                 b.left = a;
@@ -254,7 +245,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 }
                 c2.flipColor();
             } else {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = c1.left;
                 a.flipColor();
                 b.left = c1.right;
@@ -273,11 +263,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> b = getSibling(a, node);
         a.flipColor();
         b.flipColor();
-//        if (a.right == node) {
-//            a.right = node.left != null ? node.left : node.right;
-//        } else {
-//            a.left = node.left != null ? node.left : node.right;
-//        }
     }
     // case2.1.1 some grandchild of b is red
     private void case_2_1_1(Node<T> a, Node<T> node) {
@@ -291,7 +276,6 @@ public class RedBlackTree<T extends Comparable<T>> {
             if (d1 != null) {
                 b.right = d1;
                 d1.flipColor();
-                // a.right = node.left != null ? node.left : node.right;
                 a.left = c.right;
                 c.left = b;
                 c.right = a;
@@ -307,7 +291,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 }
             } else {
                 c.right = d2.left;
-                // a.right = node.left != null ? node.left : node.right;
                 a.left = d2.right;
                 d2.left = b;
                 d2.right = a;
@@ -325,7 +308,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         } else {
             // mirror case
             if (d2 != null) {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = c.left;
                 b.left = d2;
                 d2.flipColor();
@@ -342,7 +324,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                     }
                 }
             } else {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = d1.left;
                 c.left = d1.right;
                 d1.flipColor();
@@ -367,7 +348,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> c;
         if (a.right == node) {
             c = b.right;
-            // a.right = node.left != null ? node.left : node.right;
             a.left = c;
             c.flipColor();
             b.right = a;
@@ -384,7 +364,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         } else {
             // mirror case
             c = b.left;
-            // a.left = node.left != null ? node.left : node.right;
             a.right = c;
             c.flipColor();
             b.left = a;
@@ -409,7 +388,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         if (a.right == node) {
             if (d2 != null) {
                 c.right = d2.left;
-                // a.right = node.left != null ? node.left : node.right;
                 a.left = d2.right;
                 d2.left = c;
                 d2.right = a;
@@ -424,7 +402,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                     }
                 }
             } else {
-                // a.right = node.left != null ? node.left : node.right;
                 a.left = c.right;
                 c.right = a;
                 d1.flipColor();
@@ -441,7 +418,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         } else {
             // mirror case
             if (d1 != null) {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = d1.left;
                 c.left = d1.right;
                 d1.left = a;
@@ -457,7 +433,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                     }
                 }
             } else {
-                // a.left = node.left != null ? node.left : node.right;
                 a.right = c.left;
                 c.left = a;
                 d2.flipColor();
@@ -475,16 +450,13 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
     // case2.2.2 both children of b are black
     private void case_2_2_2(Node<T> a, Node<T> node) {
-        // todo: recursion up since black height is reduced by one
         if (a.right == node) {
-            // a.right = node.left != null ? node.left : node.right;
             a.left.flipColor();
         } else {
-            // a.left = node.left != null ? node.left : node.right;
             a.right.flipColor();
         }
     }
-
+    
     private Node<T>  deleteNodeWithZeroOrOneChild(Node<T> node) {
         Node<T> parent = node.parent;
         if (node.left != null) {
