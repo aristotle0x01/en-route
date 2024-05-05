@@ -456,7 +456,29 @@ public class RedBlackTree<T extends Comparable<T>> {
             a.right.flipColor();
         }
     }
-    
+
+    private void leftRotate(Node<T> node) {
+        Node<T> rightChild = node.right;
+        node.right = rightChild.left;
+        if (rightChild.left != null) {
+            rightChild.left.parent = node;
+        }
+        rightChild.left = node;
+        node.parent = rightChild;
+        resetChild(node.parent, node, rightChild);
+    }
+
+    private void rightRotate(Node<T> node) {
+        Node<T> leftChild = node.left;
+        node.left = leftChild.right;
+        if (leftChild.right != null) {
+            leftChild.right.parent = node;
+        }
+        leftChild.right = node;
+        node.parent = leftChild;
+        resetChild(node.parent, node, leftChild);
+    }
+
     private Node<T>  deleteNodeWithZeroOrOneChild(Node<T> node) {
         Node<T> parent = node.parent;
         if (node.left != null) {
