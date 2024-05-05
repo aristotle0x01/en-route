@@ -3,10 +3,10 @@ package rbtree;
 import static rbtree.Node.BLACK;
 import static rbtree.Node.RED;
 
-public class RedBlackTree<T extends Comparable<T>> {
+public class RedBlackTreeV2<T extends Comparable<T>> {
     private Node<T> root;
 
-    public RedBlackTree() {
+    public RedBlackTreeV2() {
         this.root = null;
     }
 
@@ -89,7 +89,12 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         // leaf node or one child only node
         if (node.left == null || node.right == null) {
+            // todo: can we simplify this case?
             // single node in tree
+            if (node == root && node.left == null && node.right == null) {
+                root = null;
+                return;
+            }
             delNodeColor = node.getColor();
             movedUpNode = deleteNodeWithZeroOrOneChild(node);
        } else {
@@ -119,6 +124,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 // deleted black leaf node, fix needed
                 // movedUpNode instanceof Node.ExternalNode.class
                 fixDelete(movedUpNode);
+                // todo: delete temporary movedUpNode
                 // movedUpNode.getClass() == Node.ExternalNode.class
                 resetChild(movedUpNode.parent, movedUpNode, null);
             }
@@ -210,25 +216,55 @@ public class RedBlackTree<T extends Comparable<T>> {
         // on ppt is only a single case, have to cope with mirror case in else
         if (a.right == node) {
             if (c2 != null) {
+                b.right = c2.left;
+                a.left = c2.right;
+                // a.right = node.left != null ? node.left : node.right;
                 a.flipColor();
-                leftRotate(b);
-                rightRotate(a);
+                if (g.left == a) {
+                    g.left = c2;
+                } else {
+                    g.right = c2;
+                }
+                c2.left = b;
+                c2.right = a;
             } else {
+                a.left = b.right;
+                // a.right = node.left != null ? node.left : node.right;
                 a.flipColor();
                 c1.flipColor();
                 b.flipColor();
-                rightRotate(a);
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+                b.right = a;
             }
         } else {
             if (c2 != null) {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = b.left;
                 a.flipColor();
+                b.left = a;
                 b.flipColor();
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
                 c2.flipColor();
-                leftRotate(a);
             } else {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = c1.left;
                 a.flipColor();
-                rightRotate(b);
-                leftRotate(a);
+                b.left = c1.right;
+                if (g.left == a) {
+                    g.left = c1;
+                } else {
+                    g.right = c1;
+                }
+                c1.left = a;
+                c1.right = b;
             }
         }
     }
@@ -237,6 +273,11 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> b = getSibling(a, node);
         a.flipColor();
         b.flipColor();
+//        if (a.right == node) {
+//            a.right = node.left != null ? node.left : node.right;
+//        } else {
+//            a.left = node.left != null ? node.left : node.right;
+//        }
     }
     // case2.1.1 some grandchild of b is red
     private void case_2_1_1(Node<T> a, Node<T> node) {
@@ -248,26 +289,74 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> d2 = c.right;
         if (a.right == node) {
             if (d1 != null) {
+                b.right = d1;
                 d1.flipColor();
-                leftRotate(b);
-                rightRotate(a);
+                // a.right = node.left != null ? node.left : node.right;
+                a.left = c.right;
+                c.left = b;
+                c.right = a;
+                // a is root
+                if (g == null) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                       g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
             } else {
+                c.right = d2.left;
+                // a.right = node.left != null ? node.left : node.right;
+                a.left = d2.right;
+                d2.left = b;
+                d2.right = a;
                 d2.flipColor();
-                leftRotate(c);
-                leftRotate(b);
-                rightRotate(a);
+                if (g == null) {
+                    root = d2;
+                } else {
+                    if (g.left == a) {
+                        g.left = d2;
+                    } else {
+                        g.right = d2;
+                    }
+                }
             }
         } else {
             // mirror case
             if (d2 != null) {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = c.left;
+                b.left = d2;
                 d2.flipColor();
-                rightRotate(b);
-                leftRotate(a);
+                c.left = a;
+                c.right = b;
+                // a is root
+                if (g == null) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
             } else {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = d1.left;
+                c.left = d1.right;
                 d1.flipColor();
-                rightRotate(c);
-                rightRotate(b);
-                leftRotate(a);
+                d1.left = a;
+                d1.right = b;
+                if (g == null) {
+                    root = d1;
+                } else {
+                    if (g.left == a) {
+                        g.left = d1;
+                    } else {
+                        g.right = d1;
+                    }
+                }
             }
         }
     }
@@ -278,15 +367,37 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> c;
         if (a.right == node) {
             c = b.right;
+            // a.right = node.left != null ? node.left : node.right;
+            a.left = c;
             c.flipColor();
+            b.right = a;
             b.flipColor();
-            rightRotate(a);
+            if (a == root) {
+                root = b;
+            } else {
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+            }
         } else {
             // mirror case
             c = b.left;
+            // a.left = node.left != null ? node.left : node.right;
+            a.right = c;
             c.flipColor();
+            b.left = a;
             b.flipColor();
-            leftRotate(a);
+            if (a == root) {
+                root = b;
+            } else {
+                if (g.left == a) {
+                    g.left = b;
+                } else {
+                    g.right = b;
+                }
+            }
         }
     }
     // case2.2.1 some child of b is red
@@ -297,56 +408,81 @@ public class RedBlackTree<T extends Comparable<T>> {
         Node<T> d2 = c.right;
         if (a.right == node) {
             if (d2 != null) {
+                c.right = d2.left;
+                // a.right = node.left != null ? node.left : node.right;
+                a.left = d2.right;
+                d2.left = c;
+                d2.right = a;
                 d2.flipColor();
-                leftRotate(c);
-                rightRotate(a);
+                if (root == a) {
+                    root = d2;
+                } else {
+                    if (g.left == a) {
+                        g.left = d2;
+                    } else {
+                        g.right = d2;
+                    }
+                }
             } else {
+                // a.right = node.left != null ? node.left : node.right;
+                a.left = c.right;
+                c.right = a;
                 d1.flipColor();
-                rightRotate(a);
+                if (root == a) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
             }
         } else {
             // mirror case
             if (d1 != null) {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = d1.left;
+                c.left = d1.right;
+                d1.left = a;
+                d1.right = c;
                 d1.flipColor();
-                rightRotate(c);
-                leftRotate(a);
+                if (root == a) {
+                    root = d1;
+                } else {
+                    if (g.left == a) {
+                        g.left = d1;
+                    } else {
+                        g.right = d1;
+                    }
+                }
             } else {
+                // a.left = node.left != null ? node.left : node.right;
+                a.right = c.left;
+                c.left = a;
                 d2.flipColor();
-                leftRotate(a);
+                if (root == a) {
+                    root = c;
+                } else {
+                    if (g.left == a) {
+                        g.left = c;
+                    } else {
+                        g.right = c;
+                    }
+                }
             }
         }
     }
     // case2.2.2 both children of b are black
     private void case_2_2_2(Node<T> a, Node<T> node) {
+        // todo: recursion up since black height is reduced by one
         if (a.right == node) {
+            // a.right = node.left != null ? node.left : node.right;
             a.left.flipColor();
         } else {
+            // a.left = node.left != null ? node.left : node.right;
             a.right.flipColor();
         }
-    }
-
-    private void leftRotate(Node<T> node) {
-        Node<T> parent = node.parent;
-        Node<T> rightChild = node.right;
-        node.right = rightChild.left;
-        if (rightChild.left != null) {
-            rightChild.left.parent = node;
-        }
-        rightChild.left = node;
-        node.parent = rightChild;
-        resetChild(parent, node, rightChild);
-    }
-
-    private void rightRotate(Node<T> node) {
-        Node<T> parent = node.parent;
-        Node<T> leftChild = node.left;
-        node.left = leftChild.right;
-        if (leftChild.right != null) {
-            leftChild.right.parent = node;
-        }
-        leftChild.right = node;
-        node.parent = leftChild;
-        resetChild(parent, node, leftChild);
     }
 
     private Node<T>  deleteNodeWithZeroOrOneChild(Node<T> node) {
@@ -529,7 +665,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     // Goodrich p533 6th
     private static void insertExample() {
         // Figure 11.34
-        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        RedBlackTreeV2<Integer> bst = new RedBlackTreeV2<>();
         bst.insert(4);
         bst.printTree(bst.root);
         bst.insert(7);
@@ -555,7 +691,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
     // Goodrich p539 6th
     private static void deleteExample() {
-        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        RedBlackTreeV2<Integer> bst = new RedBlackTreeV2<>();
         bst.insert(14);
         bst.insert(7);
         bst.insert(16);
@@ -589,7 +725,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     // from L17-Red-Black-Trees-clean.pptx examples
     private static void rbtree_ops() {
-        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        RedBlackTreeV2<Integer> bst = new RedBlackTreeV2<>();
         bst.insert(47);
         bst.printTree(bst.root);
         bst.insert(32);
@@ -609,7 +745,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         bst.printTree(bst.root);
     }
     private static void rbtree_ops2() {
-        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        RedBlackTreeV2<Integer> bst = new RedBlackTreeV2<>();
         bst.insert(47);
         bst.insert(32);
         bst.insert(71);
@@ -637,7 +773,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     private static void rbtree_ops3() {
-        RedBlackTree<Integer> bst = new RedBlackTree<>();
+        RedBlackTreeV2<Integer> bst = new RedBlackTreeV2<>();
         bst.insert(47);
         bst.insert(32);
         bst.insert(71);
