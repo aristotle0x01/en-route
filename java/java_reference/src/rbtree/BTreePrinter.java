@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static rbtree.Node.RED;
+
 // How to print binary tree diagram in Java?
 // https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram-in-java
 
@@ -29,10 +31,15 @@ public class BTreePrinter {
         List<Node<T>> newNodes = new ArrayList<>();
         for (Node<T> node : nodes) {
             if (node != null) {
-                if (node instanceof Node.ColorTreeNode && ((Node.ColorTreeNode<T>) node).getColor() == Node.ColorTreeNode.RED) {
+                if (node instanceof Node.ColorTreeNode && ((Node.ColorTreeNode<T>) node).getColor() == Node.RED) {
                     System.out.print("("+node.key+")");
                 } else {
-                    System.out.print(node.key);
+                    if (node.color == RED) {
+                        System.out.print("("+node.key+")");
+                    } else {
+                        System.out.print(node.key);
+                    }
+                    // System.out.print(node.key);
                 }
                 newNodes.add(node.left);
                 newNodes.add(node.right);
