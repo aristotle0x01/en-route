@@ -7,22 +7,37 @@ public class QuickSort {
     }
 
     private static int partition(int[] nums, int start, int end) {
-        // pick the last as pivot
         int pivot = nums[end];
-        int swap_index = start-1;
-        for (int i=start; i<end; i++) {
-            if (nums[i] < pivot) {
-                swap_index++;
 
-                int temp = nums[i];
-                nums[i] = nums[swap_index];
-                nums[swap_index] = temp;
+        int firstLargerIndex = -1;
+        for (int i=start; i<end; i++) {
+            if (nums[i] >= pivot) {
+                if (firstLargerIndex == -1) {
+                    firstLargerIndex = i;
+                }
+            } else {
+                if (firstLargerIndex == -1) {
+                    continue;
+                }
+
+                // swap
+                int tmp = nums[firstLargerIndex];
+                nums[firstLargerIndex] = nums[i];
+                nums[i] = tmp;
+                firstLargerIndex++;
             }
         }
 
-        nums[end] = nums[swap_index+1];
-        nums[swap_index+1] = pivot;
-        return swap_index+1;
+        if (firstLargerIndex == -1) {
+            return end;
+        }
+
+        // swap of this pos may make quicksort unstable
+        // A stable sorting algorithm preserves the relative order of equivalent elements in the sorted output.
+        // https://www.baeldung.com/cs/stable-sorting-algorithms
+        nums[end] = nums[firstLargerIndex];
+        nums[firstLargerIndex] = pivot;
+        return firstLargerIndex;
     }
     private static void sort(int[] nums, int start, int end) {
         if (start >= end){

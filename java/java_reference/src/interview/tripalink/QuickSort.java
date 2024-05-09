@@ -1,7 +1,5 @@
 package interview.tripalink;
 
-// first 5. Longest Palindromic Substring
-// then this one
 public class QuickSort {
 
     public void sort(int[] array) {
@@ -32,18 +30,17 @@ public class QuickSort {
                 if (firstLargerIndex == -1) {
                     firstLargerIndex = i;
                 }
-                continue;
-            }
+            } else {
+                if (firstLargerIndex == -1) {
+                    continue;
+                }
 
-            if (firstLargerIndex == -1) {
-                continue;
+                // swap
+                int tmp = array[firstLargerIndex];
+                array[firstLargerIndex] = array[i];
+                array[i] = tmp;
+                firstLargerIndex++;
             }
-
-            // swap
-            int tmp = array[firstLargerIndex];
-            array[firstLargerIndex] = array[i];
-            array[i] = tmp;
-            firstLargerIndex++;
         }
 
         if (firstLargerIndex == -1) {
@@ -61,7 +58,7 @@ public class QuickSort {
         // 5,2,3,1
         // 5,1,1,2,0,0
         // -4,0,7,4,9,-5,-1,0,-7,-1
-        int[] array1 = new int[]{-4,0,7,4,9,-5,-1,0,-7,-1};
+        int[] array1 = new int[]{5,1,1,2,0,0};
         s.sort(array1);
         for (int i = 0; i < array1.length; i++) {
             System.out.print(array1[i] + " ");
