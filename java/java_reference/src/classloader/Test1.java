@@ -58,9 +58,3 @@ public class Test1 extends Base {
         return false;
     }
 }
-
-class Base {
-    protected void tdb(){
-        System.out.println(this.getClass().getName());
-    }
-}
