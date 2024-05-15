@@ -19,47 +19,38 @@ public class IntensitySegments {
             throw new InvalidParameterException(String.format("%d(to) is no greater than %d(from)", to, from));
         }
 
+        // empty case
         if (container.isEmpty()) {
             container.put(from, amount);
             container.put(to, 0);
             return;
         }
 
-        Map.Entry<Integer, Integer> sentry = container.floorEntry(from);
-        int oldFromValue;
-        if (sentry == null) {
-            container.put(from, amount);
-            oldFromValue = 0;
-        } else {
-            oldFromValue = sentry.getValue();
-            container.put(from, sentry.getValue() + amount);
-        }
+        // first consider the boundary cases for 'to' and 'from'
+        Map.Entry<Integer, Integer> entry;
         if (!container.containsKey(to)) {
-            Map.Entry<Integer, Integer> eentry = container.lowerEntry(to);
-            if (eentry.getKey() != from) {
-                container.put(to, eentry.getValue());
+            entry = container.lowerEntry(to);
+            if (entry == null) {
+                container.put(to, 0);
             } else {
-                container.put(to, oldFromValue);
+                container.put(to, entry.getValue());
             }
         }
-
-        // java.util.SortedMap<Integer, Integer> subMap = container.subMap(from, to);
-        Iterator<Integer> descKeys = container.descendingKeySet().iterator();
-        while (descKeys.hasNext()) {
-            int key = descKeys.next();
-            if (key > to) {
-                continue;
-            } else if (key == to) {
-                continue;
-            } else if (key > from) {
-                // key -> (from, to)
-                container.put(key, container.get(key) + amount);
-            } else {
-                // key <= from
-                break;
-            }
+        entry = container.floorEntry(from);
+        if (entry == null) {
+            container.put(from, amount);
+        } else {
+            container.put(from, entry.getValue() + amount);
         }
 
+        // consider those inside range
+        // ensure key in range (from, to) both exclusive
+        SortedMap<Integer, Integer> subMap = container.subMap(from+1, to);
+        for (int key : subMap.keySet()) {
+            container.put(key, container.get(key) + amount);
+        }
+
+        // finally fix the consecutive zero cases
         removeConsecutiveZeroSegments();
     }
 
@@ -71,9 +62,8 @@ public class IntensitySegments {
             throw new InvalidParameterException(String.format("%d(to) is no greater than %d(from)", to, from));
         }
 
-        if (container.containsKey(to)) {
-            // do nothing
-        } else {
+        // consider the boundary case for 'to'
+        if (!container.containsKey(to)) {
             Map.Entry<Integer, Integer> entry = container.lowerEntry(to);
             if (entry == null) {
                 container.put(to, 0);
@@ -82,26 +72,16 @@ public class IntensitySegments {
             }
         }
 
-        List<Integer> removeRanges = new ArrayList<>();
-        Iterator<Integer> it = container.descendingKeySet().iterator();
-        while (it.hasNext()) {
-            int range = it.next();
-            if (range > to) {
-               continue;
-            } else if (range == to) {
-                continue;
-            } else if (range > from) {
-                removeRanges.add(range);
-            } else {
-                // range <= from
-                break;
-            }
-        }
+        // remove those inside range
+        // ensure key in range [from, to)
+        SortedMap<Integer, Integer> subMap = container.subMap(from, to);
+        List<Integer> removeRanges = new ArrayList<>(subMap.keySet());
         for (int r : removeRanges) {
             container.remove(r);
         }
         container.put(from, amount);
 
+        // finally fix the consecutive zero cases
         removeConsecutiveZeroSegments();
     }
 
@@ -127,6 +107,8 @@ public class IntensitySegments {
         if (container.isEmpty()) {
             return;
         }
+
+        // remove leading zeros, since they are redundant
         while (!container.isEmpty()) {
             int key = container.firstKey();
             if (container.get(key) == 0) {
@@ -136,6 +118,7 @@ public class IntensitySegments {
             }
         }
 
+        // find all consecutive zeros, delete thos redundant
         List<Integer> removeKeys = new ArrayList<>();
         Object[] keys = container.keySet().toArray();
         int n = keys.length;
@@ -173,6 +156,7 @@ public class IntensitySegments {
     public static void main(String[] args) {
         // Here is an example sequence:
         // (data stored as an array of start point and value for each segment.)
+        System.out.println("case1");
         IntensitySegments segments = new IntensitySegments();
         System.out.println(segments); // Should be "[]"
         segments.add(10, 30, 1);
@@ -181,8 +165,10 @@ public class IntensitySegments {
         System.out.println(segments); // Should be: "[[10,1],[20,2],[30,1],[40,0]]"
         segments.add(10, 40, -2);
         System.out.println(segments); // Should be: "[[10,-1],[20,0],[30,-1],[40,0]]"
+        System.out.println("");
 
         // Another example sequence:
+        System.out.println("case2");
         segments = new IntensitySegments();
         System.out.println(segments); // Should be "[]"
         segments.add(10, 30, 1);
@@ -193,11 +179,14 @@ public class IntensitySegments {
         System.out.println(segments); // Should be "[[20,1],[30,0]]"
         segments.add(10, 40, -1);
         System.out.println(segments); // Should be "[[10,-1],[20,0],[30,-1],[40,0]]"
+        System.out.println("");
 
+        System.out.println("case set:");
         segments.set(15, 35, 5);
         System.out.println(segments); // Should be "[[10,-1],[15,5],[35,-1],[40,0]]"
-
         segments.set(10, 30, 0);
         System.out.println(segments); // Should be "[[30,5],[35,-1],[40,0]]"
+        segments.set(-10, 100, -1);
+        System.out.println(segments); // Should be "[[-10,-1],[100,0]]"
     }
 }
