@@ -86,7 +86,7 @@ public class IntensitySegments {
     }
 
     /**
-     * print all the intensity segments like "[[10, 1], [20, 0]]"
+     * print all the intensity segments like "[[10, 1], [20, 0]]..."
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -108,7 +108,7 @@ public class IntensitySegments {
             return;
         }
 
-        // remove leading zeros, since they are redundant
+        // remove leading zeros, no need for them
         while (!container.isEmpty()) {
             int key = container.firstKey();
             if (container.get(key) == 0) {
@@ -118,7 +118,7 @@ public class IntensitySegments {
             }
         }
 
-        // find all consecutive zeros, delete thos redundant
+        // find all consecutive zeros, delete those redundant
         List<Integer> removeKeys = new ArrayList<>();
         Object[] keys = container.keySet().toArray();
         int n = keys.length;
