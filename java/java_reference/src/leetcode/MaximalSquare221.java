@@ -77,6 +77,11 @@ public class MaximalSquare221 {
                 int step = 0;
                 int maxStep = Math.min(n-j, m-i);
                 while (step < maxStep) {
+                    String key = formKey(i, j, i+step, j+step);
+                    if (cache.get(key) != null) {
+                        break;
+                    }
+
                     if (isSquare(i, j, i+step, j+step)) {
                         if ((step+1) > maxSide) {
                             maxSide = step+1;
