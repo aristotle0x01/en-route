@@ -11,20 +11,21 @@ import java.lang.reflect.Method;
 
 public class CglibProxyTest {
     public static void main(String[] args) throws Exception {
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY,"cglib");
+
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(UserServiceImpl.class);
         enhancer.setCallback(new MyInterceptor());
 
         UserServiceImpl proxy = (UserServiceImpl) enhancer.create();
-
         // ask: https://www.perplexity.ai/
         //  Q: how to save a cglib enhanced class to .class file
-        DebuggingClassWriter classWriter = new DebuggingClassWriter(ClassWriter.COMPUTE_MAXS);
-        enhancer.generateClass(classWriter);
-        byte[] bytecode = classWriter.toByteArray();
-        try (FileOutputStream fos = new FileOutputStream("EnhancedClass.class")) {
-            fos.write(bytecode);
-        }
+//        DebuggingClassWriter classWriter = new DebuggingClassWriter(ClassWriter.COMPUTE_MAXS);
+//        enhancer.generateClass(classWriter);
+//        byte[] bytecode = classWriter.toByteArray();
+//        try (FileOutputStream fos = new FileOutputStream("EnhancedClass.class")) {
+//            fos.write(bytecode);
+//        }
         proxy.select();
         proxy.update();
     }
