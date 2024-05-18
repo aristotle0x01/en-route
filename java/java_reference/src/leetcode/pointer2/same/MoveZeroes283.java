@@ -3,22 +3,26 @@ package leetcode.pointer2.same;
 public class MoveZeroes283 {
     // https://leetcode.com/problems/move-zeroes/
     public void moveZeroes(int[] nums) {
-        int n = nums.length;
-        int i = 0;
-        int j;
-        while (i < n) {
-            if (nums[i] != 0) {
-                i++;
-                continue;
-            }
+        if (nums == null || nums.length == 1) {
+            return;
+        }
 
-            j = i + 1;
-            while (j < n && nums[j] == 0) j++;
-            if (j == n) {
-                break;
+        int lastZeroIndex = -1;
+        int i = 0;
+        int n = nums.length;
+        while (i < n) {
+            int v = nums[i];
+            if (v == 0) {
+                if (lastZeroIndex == -1) {
+                    lastZeroIndex = i;
+                }
+            } else {
+                if (lastZeroIndex != -1) {
+                    nums[i] = 0;
+                    nums[lastZeroIndex] = v;
+                    lastZeroIndex++;
+                }
             }
-            nums[i] = nums[j];
-            nums[j] = 0;
             i++;
         }
     }
