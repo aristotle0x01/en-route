@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class HouseRobber198 {
     // https://leetcode.com/problems/house-robber/
+    // base of 740
 
     public int rob(int[] nums) {
         int n = nums.length;
