@@ -2,7 +2,7 @@ package interview.liftoff;
 
 import java.util.*;
 
-public class RandCity {
+public class Round1_Second_RandCity {
     // 返回的数据概率需要根据人数比例
     /*
     Sample data:
@@ -22,7 +22,7 @@ public class RandCity {
     private TreeMap<Integer, City> rangeMap;
     private Random rand;
 
-    public RandCity() {
+    public Round1_Second_RandCity() {
         this.sum = 0;
         this.list = Arrays.asList(
                 new City("NYC", 60),
@@ -47,7 +47,7 @@ public class RandCity {
     }
 
     public static void main(String[] args) {
-        RandCity rc = new RandCity();
+        Round1_Second_RandCity rc = new Round1_Second_RandCity();
         for (int i=0; i<100; i++) {
             System.out.println(rc.getRandCity());
         }

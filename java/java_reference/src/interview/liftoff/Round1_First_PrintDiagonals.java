@@ -18,7 +18,7 @@ Given an MxN matrix, write code which prints out the diagonals (from upper right
 6 2
 8
  */
-public class PrintDiagonals {
+public class Round1_First_PrintDiagonals {
     public void printDiagonals(int[][] matrix) {
         if (matrix == null || matrix.length == 0) {
             return;
@@ -47,7 +47,7 @@ public class PrintDiagonals {
     }
 
     public static void main(String[] args) {
-        PrintDiagonals s = new PrintDiagonals();
+        Round1_First_PrintDiagonals s = new Round1_First_PrintDiagonals();
         int[][] matrix = new int[][] {
                 {9,3,2},
                 {8,6,1},
