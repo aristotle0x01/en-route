@@ -28,9 +28,12 @@ public class StoneGameII1140 {
             sums[j] = piles[j] + sums[j+1];
         }
 
-        int max1 = dfs(0, 1, 1);
-        int max2 = dfs(0, 2, 1);
-        return Math.max(max1, max2);
+        int M = 1;
+        int max = 0;
+        for (int x=1; x<=(2*M); x++) {
+            max = Math.max(dfs(0, x, 1), max);
+        }
+        return max;
     }
 
     private String key(int i, int x, int M) {
@@ -44,7 +47,6 @@ public class StoneGameII1140 {
         }
 
         int acc = 0;
-
         if (i >= n) {
             return acc;
         }
@@ -57,6 +59,7 @@ public class StoneGameII1140 {
             j++;
         }
         if (j == n) {
+            map.put(key, acc);
             return acc;
         }
 
