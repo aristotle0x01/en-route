@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.dfs;
 
 public class StoneGameII1140 {
     // https://leetcode.com/problems/stone-game-ii/description/
